@@ -1,0 +1,11 @@
+create_table("Users") {
+  t.Column("email", "string", {})
+  t.Column("twitter_handle", "string", {"size": 50})
+  t.Column("age", "integer", {"default": 0})
+  t.Column("admin", "bool", {"default": false})
+  t.Column("bio", "text", {"null": true})
+  t.Column("joined_at", "timestamp", {})
+  t.Column("id", "uuid", {"default_raw": "uuid_generate_v1()"})
+  t.PrimaryKey("id")
+}
+
