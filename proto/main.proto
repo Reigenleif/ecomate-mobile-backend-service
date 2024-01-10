@@ -42,10 +42,10 @@ message GeneralStatusResponse {
     bool success = 1;
 }
 
-service Auth {
+service AuthService {
     rpc Login (LoginRequest) returns (UserResponse) {}
     rpc Register (RegisterRequest) returns (UserResponse) {}
-    rpc GoogleLogin (GoogleLoginRequest) returns (UserResponse) {}
+    rpc GoogleLogin (LoginRequest) returns (UserResponse) {}
 }
 
 message LoginRequest {
@@ -63,11 +63,18 @@ message GoogleLoginRequest {
     string idToken = 1;
 }
 
+enum Role {
+    ADMIN = 0;
+    USER = 1;
+}
+
 message UserResponse {
     string id = 1;
     string name = 2;
     string email = 3;
-    string token = 4;
+    string accessToken = 4;
+    string role = 5;
+    string imageUrl = 6;
 }
 
 service NewsService {
@@ -127,7 +134,6 @@ service User {
     rpc GetUser (GetUserRequest) returns (UserResponse) {}
     rpc CreateUser (CreateUserRequest) returns (UserResponse) {}
     rpc UpdateUser (UpdateUserRequest) returns (UserResponse) {}
-    rpc DeleteUser (DeleteUserRequest) returns (UserResponse) {}
 }
 
 message GetUserRequest {
@@ -145,9 +151,4 @@ message UpdateUserRequest {
     string name = 2;
     string email = 3;
     string password = 4;
-}
-
-
-message DeleteUserRequest {
-    string id = 1;
 }

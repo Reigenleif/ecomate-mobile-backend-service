@@ -18,10 +18,11 @@ type Example struct {
 }
 
 type User struct {
-	ID            uuid.UUID    `db:"id"`
+	ID        nulls.String `db:"id"`
+
 	Name          nulls.String `db:"name"`
 	Email         nulls.String `db:"email"`
-	EmailVerified time.Time    `db:"emailverified"`
+	EmailVerified CustomTime   `db:"emailverified"`
 	HashPassword  nulls.String `db:"hashpassword"`
 	ImageUrl      nulls.String `db:"imageurl"`
 

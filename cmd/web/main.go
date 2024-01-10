@@ -40,6 +40,7 @@ func main() {
 
 	serverRegistrar := grpc.NewServer(serverOpts...)
 	proto.RegisterNewsServiceServer(serverRegistrar, &service.NewsService{})
+	proto.RegisterAuthServiceServer(serverRegistrar, &service.AuthService{})
 
 	log.Print("Server started on port 8089")
 	err = serverRegistrar.Serve(lis)

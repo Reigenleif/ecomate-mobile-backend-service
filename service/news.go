@@ -15,7 +15,7 @@ type NewsService struct {
 }
 
 func (s *NewsService) GetNewsList(ctx context.Context, req *proto.GetNewsListRequest) (*proto.NewsListResponse, error) {
-	rows, err := db.GetDB().Query(ctx, fmt.Sprintf("SELECT * FROM public.\"News\""))
+	rows, err := db.GetDB().Query(ctx, "SELECT * FROM public.\"News\"")
 	if err != nil {
 		return nil, err
 	}

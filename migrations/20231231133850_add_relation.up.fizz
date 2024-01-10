@@ -1,5 +1,0 @@
-add_column("Users", "emojiId", "uuid",{})
-add_foreign_key("Users", "emojiId", {"Emojis" : ["id"]}, {
-    "onUpdate": "CASCADE",
-    "onDelete": "CASCADE"
-})
