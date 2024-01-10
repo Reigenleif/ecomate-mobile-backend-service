@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+option go_package = "github.com/Reigenleif/ecomate-mobile-backend-service/proto";
+
+
+service Emoji {
+    rpc GetEmoji (GetEmojiRequest) returns (EmojiResponse) {}
+    rpc CreateEmoji (CreateEmojiRequest) returns (EmojiResponse) {}
+    rpc UpdateEmoji (UpdateEmojiRequest) returns (EmojiResponse) {}
+    rpc DeleteEmoji (DeleteEmojiRequest) returns (EmojiResponse) {}
+}
+
+message GetEmojiRequest {
+    string id = 1;
+}
+
+message CreateEmojiRequest {
+    string name = 2;
+    string description = 3;
+    string image = 4;
+}
+
+message UpdateEmojiRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string image = 4;
+}
+
+message DeleteEmojiRequest {
+    string id = 1;
+}
+
+message EmojiResponse {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string image = 4;
+}
+
+message GeneralStatusResponse {
+    bool success = 1;
+}
+
+service Auth {
+    rpc Login (LoginRequest) returns (UserResponse) {}
+    rpc Register (RegisterRequest) returns (UserResponse) {}
+    rpc GoogleLogin (GoogleLoginRequest) returns (UserResponse) {}
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message RegisterRequest {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message GoogleLoginRequest {
+    string idToken = 1;
+}
+
+message UserResponse {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string token = 4;
+}
+
+service NewsService {
+    rpc GetNewsList (GetNewsListRequest) returns (NewsListResponse) {}
+    rpc GetNewsCommentList (GetNewsCommentListRequest) returns (NewsCommentListResponse) {}
+    rpc CreateNewsComment (CreateNewsCommentRequest) returns (GeneralStatusResponse) {}
+    rpc UpdateNewsComment (UpdateNewsCommentRequest) returns (GeneralStatusResponse) {}
+    rpc DeleteNewsComment (DeleteNewsCommentRequest) returns (GeneralStatusResponse) {}
+}
+
+message GetNewsListRequest {}
+message GetNewsCommentListRequest {
+    string newsId = 1;
+}
+message CreateNewsCommentRequest {
+    string newsId = 1;
+    string content = 2;
+}
+message UpdateNewsCommentRequest {
+    string newsId = 1;
+    string commentId = 2;
+    string content = 3;
+}
+message DeleteNewsCommentRequest {
+    string newsId = 1;
+    string commentId = 2;
+}
+message NewsListResponse {
+    repeated News newsList = 1;
+}
+
+message NewsCommentListResponse {
+    repeated NewsComment newsCommentList = 1;
+}
+
+message News {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    string title = 4;
+    string content = 5;
+    string imageUrl = 6;
+    string userId = 7;
+}
+
+message NewsComment {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    string content = 4;
+    string newsId = 5;
+    string userId = 6;
+}
+
+
+service User {
+    rpc GetUser (GetUserRequest) returns (UserResponse) {}
+    rpc CreateUser (CreateUserRequest) returns (UserResponse) {}
+    rpc UpdateUser (UpdateUserRequest) returns (UserResponse) {}
+    rpc DeleteUser (DeleteUserRequest) returns (UserResponse) {}
+}
+
+message GetUserRequest {
+    string id = 1;
+}
+
+message CreateUserRequest {
+    string name = 2;
+    string email = 3;
+    string password = 4;
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+}
+
+
+message DeleteUserRequest {
+    string id = 1;
+}

@@ -4,7 +4,7 @@
 // - protoc             v4.25.1
 // source: proto/main.proto
 
-package go_grpc_gauth_pg
+package proto
 
 import (
 	context "context"
@@ -213,6 +213,244 @@ var Emoji_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteEmoji",
 			Handler:    _Emoji_DeleteEmoji_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/main.proto",
+}
+
+const (
+	NewsService_GetNewsList_FullMethodName        = "/NewsService/GetNewsList"
+	NewsService_GetNewsCommentList_FullMethodName = "/NewsService/GetNewsCommentList"
+	NewsService_CreateNewsComment_FullMethodName  = "/NewsService/CreateNewsComment"
+	NewsService_UpdateNewsComment_FullMethodName  = "/NewsService/UpdateNewsComment"
+	NewsService_DeleteNewsComment_FullMethodName  = "/NewsService/DeleteNewsComment"
+)
+
+// NewsServiceClient is the client API for NewsService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type NewsServiceClient interface {
+	GetNewsList(ctx context.Context, in *GetNewsListRequest, opts ...grpc.CallOption) (*NewsListResponse, error)
+	GetNewsCommentList(ctx context.Context, in *GetNewsCommentListRequest, opts ...grpc.CallOption) (*NewsCommentListResponse, error)
+	CreateNewsComment(ctx context.Context, in *CreateNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	UpdateNewsComment(ctx context.Context, in *UpdateNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	DeleteNewsComment(ctx context.Context, in *DeleteNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+}
+
+type newsServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewNewsServiceClient(cc grpc.ClientConnInterface) NewsServiceClient {
+	return &newsServiceClient{cc}
+}
+
+func (c *newsServiceClient) GetNewsList(ctx context.Context, in *GetNewsListRequest, opts ...grpc.CallOption) (*NewsListResponse, error) {
+	out := new(NewsListResponse)
+	err := c.cc.Invoke(ctx, NewsService_GetNewsList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsServiceClient) GetNewsCommentList(ctx context.Context, in *GetNewsCommentListRequest, opts ...grpc.CallOption) (*NewsCommentListResponse, error) {
+	out := new(NewsCommentListResponse)
+	err := c.cc.Invoke(ctx, NewsService_GetNewsCommentList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsServiceClient) CreateNewsComment(ctx context.Context, in *CreateNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, NewsService_CreateNewsComment_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsServiceClient) UpdateNewsComment(ctx context.Context, in *UpdateNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, NewsService_UpdateNewsComment_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsServiceClient) DeleteNewsComment(ctx context.Context, in *DeleteNewsCommentRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, NewsService_DeleteNewsComment_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// NewsServiceServer is the server API for NewsService service.
+// All implementations must embed UnimplementedNewsServiceServer
+// for forward compatibility
+type NewsServiceServer interface {
+	GetNewsList(context.Context, *GetNewsListRequest) (*NewsListResponse, error)
+	GetNewsCommentList(context.Context, *GetNewsCommentListRequest) (*NewsCommentListResponse, error)
+	CreateNewsComment(context.Context, *CreateNewsCommentRequest) (*GeneralStatusResponse, error)
+	UpdateNewsComment(context.Context, *UpdateNewsCommentRequest) (*GeneralStatusResponse, error)
+	DeleteNewsComment(context.Context, *DeleteNewsCommentRequest) (*GeneralStatusResponse, error)
+	mustEmbedUnimplementedNewsServiceServer()
+}
+
+// UnimplementedNewsServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedNewsServiceServer struct {
+}
+
+func (UnimplementedNewsServiceServer) GetNewsList(context.Context, *GetNewsListRequest) (*NewsListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNewsList not implemented")
+}
+func (UnimplementedNewsServiceServer) GetNewsCommentList(context.Context, *GetNewsCommentListRequest) (*NewsCommentListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNewsCommentList not implemented")
+}
+func (UnimplementedNewsServiceServer) CreateNewsComment(context.Context, *CreateNewsCommentRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNewsComment not implemented")
+}
+func (UnimplementedNewsServiceServer) UpdateNewsComment(context.Context, *UpdateNewsCommentRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNewsComment not implemented")
+}
+func (UnimplementedNewsServiceServer) DeleteNewsComment(context.Context, *DeleteNewsCommentRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteNewsComment not implemented")
+}
+func (UnimplementedNewsServiceServer) mustEmbedUnimplementedNewsServiceServer() {}
+
+// UnsafeNewsServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to NewsServiceServer will
+// result in compilation errors.
+type UnsafeNewsServiceServer interface {
+	mustEmbedUnimplementedNewsServiceServer()
+}
+
+func RegisterNewsServiceServer(s grpc.ServiceRegistrar, srv NewsServiceServer) {
+	s.RegisterService(&NewsService_ServiceDesc, srv)
+}
+
+func _NewsService_GetNewsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNewsListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServiceServer).GetNewsList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NewsService_GetNewsList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServiceServer).GetNewsList(ctx, req.(*GetNewsListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NewsService_GetNewsCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNewsCommentListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServiceServer).GetNewsCommentList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NewsService_GetNewsCommentList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServiceServer).GetNewsCommentList(ctx, req.(*GetNewsCommentListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NewsService_CreateNewsComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateNewsCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServiceServer).CreateNewsComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NewsService_CreateNewsComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServiceServer).CreateNewsComment(ctx, req.(*CreateNewsCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NewsService_UpdateNewsComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNewsCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServiceServer).UpdateNewsComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NewsService_UpdateNewsComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServiceServer).UpdateNewsComment(ctx, req.(*UpdateNewsCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NewsService_DeleteNewsComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteNewsCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServiceServer).DeleteNewsComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NewsService_DeleteNewsComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServiceServer).DeleteNewsComment(ctx, req.(*DeleteNewsCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// NewsService_ServiceDesc is the grpc.ServiceDesc for NewsService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var NewsService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "NewsService",
+	HandlerType: (*NewsServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetNewsList",
+			Handler:    _NewsService_GetNewsList_Handler,
+		},
+		{
+			MethodName: "GetNewsCommentList",
+			Handler:    _NewsService_GetNewsCommentList_Handler,
+		},
+		{
+			MethodName: "CreateNewsComment",
+			Handler:    _NewsService_CreateNewsComment_Handler,
+		},
+		{
+			MethodName: "UpdateNewsComment",
+			Handler:    _NewsService_UpdateNewsComment_Handler,
+		},
+		{
+			MethodName: "DeleteNewsComment",
+			Handler:    _NewsService_DeleteNewsComment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

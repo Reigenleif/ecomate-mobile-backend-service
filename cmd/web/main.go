@@ -1,14 +1,13 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"log"
 	"net"
 
-	go_grpc_gauth_pg "github.com/Reigenleif/go-grpc-gauth-pg/api"
-	"github.com/Reigenleif/go-grpc-gauth-pg/internal/db"
-	"github.com/Reigenleif/go-grpc-gauth-pg/service"
+	proto"github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/service"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"google.golang.org/grpc"
 )
@@ -29,14 +28,6 @@ func main() {
 		panic(err)
 	}
 
-	// testping
-	r, err := db.GetDB().Query(context.Background(), "SELECT * FROM public.\"Emojis\"")
-	if err != nil {
-		panic(err)
-	}
-
-	defer r.Close()
-
 	// Initiate gRPC server
 	lis, err := net.Listen("tcp", ":8089")
 	if err != nil {
@@ -48,10 +39,8 @@ func main() {
 	}
 
 	serverRegistrar := grpc.NewServer(serverOpts...)
-	emojiService := &service.EmojiService{}
+	proto.RegisterNewsServiceServer(serverRegistrar, &service.NewsService{})
 
-	
-	go_grpc_gauth_pg.RegisterEmojiServer(serverRegistrar, emojiService)
 	log.Print("Server started on port 8089")
 	err = serverRegistrar.Serve(lis)
 	if err != nil {
