@@ -43,6 +43,7 @@ func main() {
 	proto.RegisterAuthServiceServer(serverRegistrar, &service.AuthService{})
 	proto.RegisterMarketplaceServer(serverRegistrar, &service.MarketplaceService{})
 	proto.RegisterFlashcardServiceServer(serverRegistrar, &service.FlashcardService{})
+	proto.RegisterUserServiceServer(serverRegistrar, &service.UserService{})
 
 	log.Print("Server started on port 8089")
 	err = serverRegistrar.Serve(lis)

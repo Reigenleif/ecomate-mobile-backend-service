@@ -24,7 +24,7 @@ func (s *AuthService) Login(ctx context.Context, req *proto.LoginRequest) (*prot
 
 	var user models.User
 	if rows.Next() {
-		err := rows.Scan(&user.ID, &user.Name, &user.Email,nil, &user.HashPassword, &user.ImageUrl, &user.Role)
+		err := rows.Scan(&user.ID, &user.Name, &user.Email, nil, &user.HashPassword, &user.ImageUrl, &user.Role)
 		if err != nil {
 			return nil, err
 		}
@@ -38,6 +38,7 @@ func (s *AuthService) Login(ctx context.Context, req *proto.LoginRequest) (*prot
 	uc := token_service.UserClaims{
 		Id:    user.ID.String,
 		Email: user.Email.String,
+		Role:  user.Role.String,
 	}
 
 	accessToken, err := token_service.NewAccessToken(uc)
@@ -92,6 +93,7 @@ func (s *AuthService) Register(ctx context.Context, req *proto.RegisterRequest) 
 	uc := token_service.UserClaims{
 		Id:    user.ID.String,
 		Email: user.Email.String,
+		Role:  user.Role.String,
 	}
 
 	accessToken, err := token_service.NewAccessToken(uc)

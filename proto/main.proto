@@ -157,7 +157,7 @@ message Flashcard {
 
 
 
-service User {
+service UserService {
     rpc GetUser (GetUserRequest) returns (UserResponse) {}
     rpc UpdateUser (UpdateUserRequest) returns (UserResponse) {}
 }
@@ -168,9 +168,10 @@ message GetUserRequest {
 
 message UpdateUserRequest {
     string id = 1;
-    string name = 2;
-    string email = 3;
-    string password = 4;
+    optional string name = 2;
+    optional string email = 3;
+    optional string password = 4;
+    optional string imageUrl = 5;
 }
 
 service Marketplace {
