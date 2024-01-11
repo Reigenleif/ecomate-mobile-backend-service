@@ -29,7 +29,7 @@ func main() {
 	}
 
 	// Initiate gRPC server
-	lis, err := net.Listen("tcp", ":8089")
+	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("cannot create listener: %s", err)
 	}
@@ -45,11 +45,11 @@ func main() {
 	proto.RegisterFlashcardServiceServer(serverRegistrar, &service.FlashcardService{})
 	proto.RegisterUserServiceServer(serverRegistrar, &service.UserService{})
 
-	log.Print("Server started on port 8089")
+	log.Print("Server started on port 8080")
 	err = serverRegistrar.Serve(lis)
 	if err != nil {
 		log.Fatalf("impossible to serve: %s", err)
 	}
-	log.Print("Server started on port 8089")
+	log.Print("Server started on port 8080")
 }
 
