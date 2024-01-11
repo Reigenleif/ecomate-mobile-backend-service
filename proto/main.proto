@@ -129,21 +129,41 @@ message NewsComment {
     string userId = 6;
 }
 
+service FlashcardService {
+    rpc GetFlashcardList (GetFlashcardListRequest) returns (FlashcardListResponse) {}
+    rpc GetFlashcardById (GetFlashcardByIdRequest) returns (FlashcardResponse) {}
+}
+
+message GetFlashcardListRequest {}
+message GetFlashcardByIdRequest {
+    string id = 1;
+}
+message FlashcardListResponse {
+    repeated Flashcard flashcardList = 1;
+}
+
+message FlashcardResponse {
+    Flashcard flashcard = 1;
+}
+
+message Flashcard {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    string title = 4;
+    string description = 5;
+    string imageUrl = 6;
+}
+
+
 
 service User {
     rpc GetUser (GetUserRequest) returns (UserResponse) {}
-    rpc CreateUser (CreateUserRequest) returns (UserResponse) {}
     rpc UpdateUser (UpdateUserRequest) returns (UserResponse) {}
 }
 
 message GetUserRequest {
     string id = 1;
-}
-
-message CreateUserRequest {
-    string name = 2;
-    string email = 3;
-    string password = 4;
 }
 
 message UpdateUserRequest {
@@ -152,3 +172,132 @@ message UpdateUserRequest {
     string email = 3;
     string password = 4;
 }
+
+service Marketplace {
+    rpc GetMarketplaceCategoryList (GetMarketplaceCategoryListRequest) returns (MarketplaceCategoryListResponse) {}
+    rpc GetMarketplaceItemListByCategoryId (GetMarketplaceItemListByCategoryIdRequest) returns (MarketplaceItemListResponse) {}
+    rpc GetMarketplaceItemList (GetMarketplaceItemListRequest) returns (MarketplaceItemListResponse) {}
+    rpc GetMarketplaceItemById (GetMarketplaceItemByIdRequest) returns (MarketplaceItemResponse) {}
+    rpc CreateMarketplaceItem (CreateMarketplaceItemRequest) returns (GeneralStatusResponse) {}
+    rpc UpdateMarketplaceItem (UpdateMarketplaceItemRequest) returns (GeneralStatusResponse) {}
+    rpc DeleteMarketplaceItem (DeleteMarketplaceItemRequest) returns (GeneralStatusResponse) {}
+    rpc GetCartByUserId (GetCartByUserIdRequest) returns (CartResponse) {}
+    rpc DeleteCartByUserId (DeleteCartByUserIdRequest) returns (GeneralStatusResponse) {}
+    rpc AddCartItem (AddCartItemRequest) returns (GeneralStatusResponse) {}
+    rpc RemoveCartItem (RemoveCartItemRequest) returns (GeneralStatusResponse) {}
+    rpc UpdateCartItem (UpdateCartItemRequest) returns (GeneralStatusResponse) {}
+    rpc CheckOutCart (CheckOutCartRequest) returns (GeneralStatusResponse) {}
+    rpc CheckOutCartItem (CheckOutCartItemRequest) returns (GeneralStatusResponse) {}
+    rpc GetCheckedOutItemList (GetCheckedOutItemListRequest) returns (CartItemListResponse) {}
+    rpc ConfirmCartItem (ConfirmCartItemRequest) returns (GeneralStatusResponse) {}
+}
+
+message GetMarketplaceCategoryListRequest {}
+message MarketplaceCategoryListResponse {
+    repeated MarketplaceCategory marketplaceCategoryList = 1;
+}
+
+message MarketplaceCategory {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    string name = 4;
+    string description = 5;
+    string imageUrl = 6;
+}
+
+message GetMarketplaceItemListByCategoryIdRequest {
+    string categoryId = 1;
+}
+
+message GetMarketplaceItemListRequest {}
+message GetMarketplaceItemByIdRequest {
+    string id = 1;
+}
+message CreateMarketplaceItemRequest {
+    string name = 1;
+    string description = 2;
+    int32 price = 3;
+    string imageUrl = 4;
+    string categoryId = 5;
+}
+message UpdateMarketplaceItemRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    int32 price = 4;
+    string imageUrl = 5;
+    string categoryId = 6;
+}
+message DeleteMarketplaceItemRequest {
+    string id = 1;
+}
+
+message GetCartByUserIdRequest {}
+
+message DeleteCartByUserIdRequest {}
+
+message AddCartItemRequest {
+    string itemId = 1;
+    int32 quantity = 2;
+}
+
+message RemoveCartItemRequest {
+    string itemId = 1;
+}
+
+message UpdateCartItemRequest {
+    string itemId = 1;
+    int32 quantity = 2;
+}
+
+message MarketplaceItemListResponse {
+    repeated MarketplaceItem marketplaceItemList = 1;
+}
+
+message MarketplaceItemResponse {
+    MarketplaceItem marketplaceItem = 1;
+}
+
+message CartResponse {
+    repeated CartItem cartItemList = 1;
+}
+
+message MarketplaceItem {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    string name = 4;
+    string description = 5;
+    int32 price = 6;
+    string imageUrl = 7;
+}
+
+message CartItem {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    int32 quantity = 4;
+    string cartId = 5;
+    string itemId = 6;
+    bool isConfirmed = 7;
+    bool isCheckedOut = 8;
+}
+
+message CheckOutCartRequest {}
+
+message CheckOutCartItemRequest {
+    string cartItemId = 1;
+}
+
+message GetCheckedOutItemListRequest {}
+
+message CartItemListResponse {
+    repeated CartItem cartItemList = 1;
+}
+
+message ConfirmCartItemRequest {
+    string cartItemId = 2;
+}
+
+

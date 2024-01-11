@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	db "github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
 	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/token_service"
 	models "github.com/Reigenleif/ecomate-mobile-backend-service/models"
 	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	"github.com/gofrs/uuid"
 )
 
 type NewsService struct {
@@ -33,13 +33,12 @@ func (s *NewsService) GetNewsList(ctx context.Context, req *proto.GetNewsListReq
 	var newsList []*proto.News
 	for _, item := range newsDbList {
 		newsList = append(newsList, &proto.News{
-			Id: item.ID.String,
-			Title: item.Title.String,
+			Id:       item.ID.String,
+			Title:    item.Title.String,
 			ImageUrl: item.ImageUrl.String,
-			Content: item.Content.String,
+			Content:  item.Content.String,
 		})
 	}
-
 
 	return &proto.NewsListResponse{
 		NewsList: newsList,
@@ -47,19 +46,29 @@ func (s *NewsService) GetNewsList(ctx context.Context, req *proto.GetNewsListReq
 }
 
 func (s *NewsService) GetNewsCommentList(ctx context.Context, req *proto.GetNewsCommentListRequest) (*proto.NewsCommentListResponse, error) {
-	newsComment, err := db.Get[models.NewsComment](ctx, "SELECT * FROM public.\"NewsComment\"")
-
+	rows, err := db.GetDB().Query(ctx, "SELECT * FROM public.\"NewsComment\" WHERE \"newsId\" = '"+req.NewsId+"';")
 	if err != nil {
 		return nil, err
 	}
 
+	newsCommentDbList := []models.NewsComment{}
+	for rows.Next() {
+		var newsCommentDb models.NewsComment
+		err := rows.Scan(&newsCommentDb.ID, &newsCommentDb.CreatedAt, nil, &newsCommentDb.Content, &newsCommentDb.NewsID, &newsCommentDb.UserID)
+		if err != nil {
+			return nil, err
+		}
+		newsCommentDbList = append(newsCommentDbList, newsCommentDb)
+	}
+
 	var newsCommentList []*proto.NewsComment
-	for _, item := range newsComment {
+	for _, item := range newsCommentDbList {
 		newsCommentList = append(newsCommentList, &proto.NewsComment{
-			Id: item.ID.String(),
+			Id:      item.ID.String,
+			CreatedAt: item.CreatedAt.String(),
 			Content: item.Content.String,
-			NewsId: item.NewsID.String(),
-			UserId: item.UserID.String(),
+			NewsId:  item.NewsID.String,
+			UserId:  item.UserID.String,
 		})
 	}
 
@@ -74,13 +83,14 @@ func (s *NewsService) CreateNewsComment(ctx context.Context, req *proto.CreateNe
 		return nil, err
 	}
 
-	res , err := db.Exec(ctx, fmt.Sprintf("INSERT INTO public.\"NewsComment\" (content, newsid, userid) VALUES (%s, %s, %s)", req.Content, req.NewsId, userClaims.Id))
-	if err != nil {
-		return nil, err
+	randId := uuid.Must(uuid.NewV4()).String()
+	_, errExec := db.GetDB().Exec(ctx, "INSERT INTO public.\"NewsComment\" (id, content, \"newsId\", \"userId\") VALUES ($1, $2, $3, $4)", randId, req.Content, req.NewsId, userClaims.Id)
+	if errExec != nil {
+		return nil, errExec
 	}
 
 	return &proto.GeneralStatusResponse{
-		Success: res,
+		Success: true,
 	}, nil
 }
 
@@ -90,13 +100,13 @@ func (s *NewsService) UpdateNewsComment(ctx context.Context, req *proto.UpdateNe
 		return nil, err
 	}
 
-	res , err := db.Exec(ctx, fmt.Sprintf("UPDATE public.\"NewsComment\" SET content = %s WHERE id = %s", req.Content, userClaims.Id))
+	_, errExec := db.GetDB().Exec(ctx, "UPDATE public.\"NewsComment\" SET content = $1 WHERE id = $2 AND \"userId\" = $3", req.Content, req.CommentId, userClaims.Id)
 	if err != nil {
-		return nil, err
+		return nil, errExec
 	}
 
 	return &proto.GeneralStatusResponse{
-		Success: res,
+		Success: true,
 	}, nil
 }
 
@@ -106,14 +116,12 @@ func (s *NewsService) DeleteNewsComment(ctx context.Context, req *proto.DeleteNe
 		return nil, err
 	}
 
-	res , err := db.Exec(ctx, fmt.Sprintf("DELETE FROM public.\"NewsComment\" WHERE id = %s", userClaims.Id))
+	_, errExec := db.GetDB().Exec(ctx, "DELETE FROM public.\"NewsComment\" WHERE id = $1 AND \"userId\" = $2", req.CommentId, userClaims.Id)
 	if err != nil {
-		return nil, err
+		return nil, errExec
 	}
 
 	return &proto.GeneralStatusResponse{
-		Success: res,
+		Success: true,
 	}, nil
 }
-
-

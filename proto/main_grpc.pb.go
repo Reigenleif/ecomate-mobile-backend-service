@@ -622,8 +622,134 @@ var NewsService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	FlashcardService_GetFlashcardList_FullMethodName = "/FlashcardService/GetFlashcardList"
+	FlashcardService_GetFlashcardById_FullMethodName = "/FlashcardService/GetFlashcardById"
+)
+
+// FlashcardServiceClient is the client API for FlashcardService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type FlashcardServiceClient interface {
+	GetFlashcardList(ctx context.Context, in *GetFlashcardListRequest, opts ...grpc.CallOption) (*FlashcardListResponse, error)
+	GetFlashcardById(ctx context.Context, in *GetFlashcardByIdRequest, opts ...grpc.CallOption) (*FlashcardResponse, error)
+}
+
+type flashcardServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewFlashcardServiceClient(cc grpc.ClientConnInterface) FlashcardServiceClient {
+	return &flashcardServiceClient{cc}
+}
+
+func (c *flashcardServiceClient) GetFlashcardList(ctx context.Context, in *GetFlashcardListRequest, opts ...grpc.CallOption) (*FlashcardListResponse, error) {
+	out := new(FlashcardListResponse)
+	err := c.cc.Invoke(ctx, FlashcardService_GetFlashcardList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *flashcardServiceClient) GetFlashcardById(ctx context.Context, in *GetFlashcardByIdRequest, opts ...grpc.CallOption) (*FlashcardResponse, error) {
+	out := new(FlashcardResponse)
+	err := c.cc.Invoke(ctx, FlashcardService_GetFlashcardById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FlashcardServiceServer is the server API for FlashcardService service.
+// All implementations must embed UnimplementedFlashcardServiceServer
+// for forward compatibility
+type FlashcardServiceServer interface {
+	GetFlashcardList(context.Context, *GetFlashcardListRequest) (*FlashcardListResponse, error)
+	GetFlashcardById(context.Context, *GetFlashcardByIdRequest) (*FlashcardResponse, error)
+	mustEmbedUnimplementedFlashcardServiceServer()
+}
+
+// UnimplementedFlashcardServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedFlashcardServiceServer struct {
+}
+
+func (UnimplementedFlashcardServiceServer) GetFlashcardList(context.Context, *GetFlashcardListRequest) (*FlashcardListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFlashcardList not implemented")
+}
+func (UnimplementedFlashcardServiceServer) GetFlashcardById(context.Context, *GetFlashcardByIdRequest) (*FlashcardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFlashcardById not implemented")
+}
+func (UnimplementedFlashcardServiceServer) mustEmbedUnimplementedFlashcardServiceServer() {}
+
+// UnsafeFlashcardServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FlashcardServiceServer will
+// result in compilation errors.
+type UnsafeFlashcardServiceServer interface {
+	mustEmbedUnimplementedFlashcardServiceServer()
+}
+
+func RegisterFlashcardServiceServer(s grpc.ServiceRegistrar, srv FlashcardServiceServer) {
+	s.RegisterService(&FlashcardService_ServiceDesc, srv)
+}
+
+func _FlashcardService_GetFlashcardList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlashcardListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlashcardServiceServer).GetFlashcardList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlashcardService_GetFlashcardList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlashcardServiceServer).GetFlashcardList(ctx, req.(*GetFlashcardListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FlashcardService_GetFlashcardById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlashcardByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlashcardServiceServer).GetFlashcardById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlashcardService_GetFlashcardById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlashcardServiceServer).GetFlashcardById(ctx, req.(*GetFlashcardByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// FlashcardService_ServiceDesc is the grpc.ServiceDesc for FlashcardService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var FlashcardService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "FlashcardService",
+	HandlerType: (*FlashcardServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetFlashcardList",
+			Handler:    _FlashcardService_GetFlashcardList_Handler,
+		},
+		{
+			MethodName: "GetFlashcardById",
+			Handler:    _FlashcardService_GetFlashcardById_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/main.proto",
+}
+
+const (
 	User_GetUser_FullMethodName    = "/User/GetUser"
-	User_CreateUser_FullMethodName = "/User/CreateUser"
 	User_UpdateUser_FullMethodName = "/User/UpdateUser"
 )
 
@@ -632,7 +758,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 }
 
@@ -653,15 +778,6 @@ func (c *userClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...gr
 	return out, nil
 }
 
-func (c *userClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
-	err := c.cc.Invoke(ctx, User_CreateUser_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
 	out := new(UserResponse)
 	err := c.cc.Invoke(ctx, User_UpdateUser_FullMethodName, in, out, opts...)
@@ -676,7 +792,6 @@ func (c *userClient) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts
 // for forward compatibility
 type UserServer interface {
 	GetUser(context.Context, *GetUserRequest) (*UserResponse, error)
-	CreateUser(context.Context, *CreateUserRequest) (*UserResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UserResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -687,9 +802,6 @@ type UnimplementedUserServer struct {
 
 func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
-}
-func (UnimplementedUserServer) CreateUser(context.Context, *CreateUserRequest) (*UserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedUserServer) UpdateUser(context.Context, *UpdateUserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
@@ -725,24 +837,6 @@ func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).CreateUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: User_CreateUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).CreateUser(ctx, req.(*CreateUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _User_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateUserRequest)
 	if err := dec(in); err != nil {
@@ -773,12 +867,653 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_GetUser_Handler,
 		},
 		{
-			MethodName: "CreateUser",
-			Handler:    _User_CreateUser_Handler,
-		},
-		{
 			MethodName: "UpdateUser",
 			Handler:    _User_UpdateUser_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/main.proto",
+}
+
+const (
+	Marketplace_GetMarketplaceCategoryList_FullMethodName         = "/Marketplace/GetMarketplaceCategoryList"
+	Marketplace_GetMarketplaceItemListByCategoryId_FullMethodName = "/Marketplace/GetMarketplaceItemListByCategoryId"
+	Marketplace_GetMarketplaceItemList_FullMethodName             = "/Marketplace/GetMarketplaceItemList"
+	Marketplace_GetMarketplaceItemById_FullMethodName             = "/Marketplace/GetMarketplaceItemById"
+	Marketplace_CreateMarketplaceItem_FullMethodName              = "/Marketplace/CreateMarketplaceItem"
+	Marketplace_UpdateMarketplaceItem_FullMethodName              = "/Marketplace/UpdateMarketplaceItem"
+	Marketplace_DeleteMarketplaceItem_FullMethodName              = "/Marketplace/DeleteMarketplaceItem"
+	Marketplace_GetCartByUserId_FullMethodName                    = "/Marketplace/GetCartByUserId"
+	Marketplace_DeleteCartByUserId_FullMethodName                 = "/Marketplace/DeleteCartByUserId"
+	Marketplace_AddCartItem_FullMethodName                        = "/Marketplace/AddCartItem"
+	Marketplace_RemoveCartItem_FullMethodName                     = "/Marketplace/RemoveCartItem"
+	Marketplace_UpdateCartItem_FullMethodName                     = "/Marketplace/UpdateCartItem"
+	Marketplace_CheckOutCart_FullMethodName                       = "/Marketplace/CheckOutCart"
+	Marketplace_CheckOutCartItem_FullMethodName                   = "/Marketplace/CheckOutCartItem"
+	Marketplace_GetCheckedOutItemList_FullMethodName              = "/Marketplace/GetCheckedOutItemList"
+	Marketplace_ConfirmCartItem_FullMethodName                    = "/Marketplace/ConfirmCartItem"
+)
+
+// MarketplaceClient is the client API for Marketplace service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type MarketplaceClient interface {
+	GetMarketplaceCategoryList(ctx context.Context, in *GetMarketplaceCategoryListRequest, opts ...grpc.CallOption) (*MarketplaceCategoryListResponse, error)
+	GetMarketplaceItemListByCategoryId(ctx context.Context, in *GetMarketplaceItemListByCategoryIdRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error)
+	GetMarketplaceItemList(ctx context.Context, in *GetMarketplaceItemListRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error)
+	GetMarketplaceItemById(ctx context.Context, in *GetMarketplaceItemByIdRequest, opts ...grpc.CallOption) (*MarketplaceItemResponse, error)
+	CreateMarketplaceItem(ctx context.Context, in *CreateMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	UpdateMarketplaceItem(ctx context.Context, in *UpdateMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	DeleteMarketplaceItem(ctx context.Context, in *DeleteMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	GetCartByUserId(ctx context.Context, in *GetCartByUserIdRequest, opts ...grpc.CallOption) (*CartResponse, error)
+	DeleteCartByUserId(ctx context.Context, in *DeleteCartByUserIdRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	AddCartItem(ctx context.Context, in *AddCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	RemoveCartItem(ctx context.Context, in *RemoveCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	UpdateCartItem(ctx context.Context, in *UpdateCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	CheckOutCart(ctx context.Context, in *CheckOutCartRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	CheckOutCartItem(ctx context.Context, in *CheckOutCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	GetCheckedOutItemList(ctx context.Context, in *GetCheckedOutItemListRequest, opts ...grpc.CallOption) (*CartItemListResponse, error)
+	ConfirmCartItem(ctx context.Context, in *ConfirmCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+}
+
+type marketplaceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewMarketplaceClient(cc grpc.ClientConnInterface) MarketplaceClient {
+	return &marketplaceClient{cc}
+}
+
+func (c *marketplaceClient) GetMarketplaceCategoryList(ctx context.Context, in *GetMarketplaceCategoryListRequest, opts ...grpc.CallOption) (*MarketplaceCategoryListResponse, error) {
+	out := new(MarketplaceCategoryListResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetMarketplaceCategoryList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) GetMarketplaceItemListByCategoryId(ctx context.Context, in *GetMarketplaceItemListByCategoryIdRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error) {
+	out := new(MarketplaceItemListResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetMarketplaceItemListByCategoryId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) GetMarketplaceItemList(ctx context.Context, in *GetMarketplaceItemListRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error) {
+	out := new(MarketplaceItemListResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetMarketplaceItemList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) GetMarketplaceItemById(ctx context.Context, in *GetMarketplaceItemByIdRequest, opts ...grpc.CallOption) (*MarketplaceItemResponse, error) {
+	out := new(MarketplaceItemResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetMarketplaceItemById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) CreateMarketplaceItem(ctx context.Context, in *CreateMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_CreateMarketplaceItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) UpdateMarketplaceItem(ctx context.Context, in *UpdateMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_UpdateMarketplaceItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) DeleteMarketplaceItem(ctx context.Context, in *DeleteMarketplaceItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_DeleteMarketplaceItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) GetCartByUserId(ctx context.Context, in *GetCartByUserIdRequest, opts ...grpc.CallOption) (*CartResponse, error) {
+	out := new(CartResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetCartByUserId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) DeleteCartByUserId(ctx context.Context, in *DeleteCartByUserIdRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_DeleteCartByUserId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) AddCartItem(ctx context.Context, in *AddCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_AddCartItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) RemoveCartItem(ctx context.Context, in *RemoveCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_RemoveCartItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) UpdateCartItem(ctx context.Context, in *UpdateCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_UpdateCartItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) CheckOutCart(ctx context.Context, in *CheckOutCartRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_CheckOutCart_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) CheckOutCartItem(ctx context.Context, in *CheckOutCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_CheckOutCartItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) GetCheckedOutItemList(ctx context.Context, in *GetCheckedOutItemListRequest, opts ...grpc.CallOption) (*CartItemListResponse, error) {
+	out := new(CartItemListResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetCheckedOutItemList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *marketplaceClient) ConfirmCartItem(ctx context.Context, in *ConfirmCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error) {
+	out := new(GeneralStatusResponse)
+	err := c.cc.Invoke(ctx, Marketplace_ConfirmCartItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// MarketplaceServer is the server API for Marketplace service.
+// All implementations must embed UnimplementedMarketplaceServer
+// for forward compatibility
+type MarketplaceServer interface {
+	GetMarketplaceCategoryList(context.Context, *GetMarketplaceCategoryListRequest) (*MarketplaceCategoryListResponse, error)
+	GetMarketplaceItemListByCategoryId(context.Context, *GetMarketplaceItemListByCategoryIdRequest) (*MarketplaceItemListResponse, error)
+	GetMarketplaceItemList(context.Context, *GetMarketplaceItemListRequest) (*MarketplaceItemListResponse, error)
+	GetMarketplaceItemById(context.Context, *GetMarketplaceItemByIdRequest) (*MarketplaceItemResponse, error)
+	CreateMarketplaceItem(context.Context, *CreateMarketplaceItemRequest) (*GeneralStatusResponse, error)
+	UpdateMarketplaceItem(context.Context, *UpdateMarketplaceItemRequest) (*GeneralStatusResponse, error)
+	DeleteMarketplaceItem(context.Context, *DeleteMarketplaceItemRequest) (*GeneralStatusResponse, error)
+	GetCartByUserId(context.Context, *GetCartByUserIdRequest) (*CartResponse, error)
+	DeleteCartByUserId(context.Context, *DeleteCartByUserIdRequest) (*GeneralStatusResponse, error)
+	AddCartItem(context.Context, *AddCartItemRequest) (*GeneralStatusResponse, error)
+	RemoveCartItem(context.Context, *RemoveCartItemRequest) (*GeneralStatusResponse, error)
+	UpdateCartItem(context.Context, *UpdateCartItemRequest) (*GeneralStatusResponse, error)
+	CheckOutCart(context.Context, *CheckOutCartRequest) (*GeneralStatusResponse, error)
+	CheckOutCartItem(context.Context, *CheckOutCartItemRequest) (*GeneralStatusResponse, error)
+	GetCheckedOutItemList(context.Context, *GetCheckedOutItemListRequest) (*CartItemListResponse, error)
+	ConfirmCartItem(context.Context, *ConfirmCartItemRequest) (*GeneralStatusResponse, error)
+	mustEmbedUnimplementedMarketplaceServer()
+}
+
+// UnimplementedMarketplaceServer must be embedded to have forward compatible implementations.
+type UnimplementedMarketplaceServer struct {
+}
+
+func (UnimplementedMarketplaceServer) GetMarketplaceCategoryList(context.Context, *GetMarketplaceCategoryListRequest) (*MarketplaceCategoryListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMarketplaceCategoryList not implemented")
+}
+func (UnimplementedMarketplaceServer) GetMarketplaceItemListByCategoryId(context.Context, *GetMarketplaceItemListByCategoryIdRequest) (*MarketplaceItemListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMarketplaceItemListByCategoryId not implemented")
+}
+func (UnimplementedMarketplaceServer) GetMarketplaceItemList(context.Context, *GetMarketplaceItemListRequest) (*MarketplaceItemListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMarketplaceItemList not implemented")
+}
+func (UnimplementedMarketplaceServer) GetMarketplaceItemById(context.Context, *GetMarketplaceItemByIdRequest) (*MarketplaceItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMarketplaceItemById not implemented")
+}
+func (UnimplementedMarketplaceServer) CreateMarketplaceItem(context.Context, *CreateMarketplaceItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMarketplaceItem not implemented")
+}
+func (UnimplementedMarketplaceServer) UpdateMarketplaceItem(context.Context, *UpdateMarketplaceItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMarketplaceItem not implemented")
+}
+func (UnimplementedMarketplaceServer) DeleteMarketplaceItem(context.Context, *DeleteMarketplaceItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMarketplaceItem not implemented")
+}
+func (UnimplementedMarketplaceServer) GetCartByUserId(context.Context, *GetCartByUserIdRequest) (*CartResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCartByUserId not implemented")
+}
+func (UnimplementedMarketplaceServer) DeleteCartByUserId(context.Context, *DeleteCartByUserIdRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCartByUserId not implemented")
+}
+func (UnimplementedMarketplaceServer) AddCartItem(context.Context, *AddCartItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) RemoveCartItem(context.Context, *RemoveCartItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) UpdateCartItem(context.Context, *UpdateCartItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) CheckOutCart(context.Context, *CheckOutCartRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckOutCart not implemented")
+}
+func (UnimplementedMarketplaceServer) CheckOutCartItem(context.Context, *CheckOutCartItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckOutCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) GetCheckedOutItemList(context.Context, *GetCheckedOutItemListRequest) (*CartItemListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCheckedOutItemList not implemented")
+}
+func (UnimplementedMarketplaceServer) ConfirmCartItem(context.Context, *ConfirmCartItemRequest) (*GeneralStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) mustEmbedUnimplementedMarketplaceServer() {}
+
+// UnsafeMarketplaceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to MarketplaceServer will
+// result in compilation errors.
+type UnsafeMarketplaceServer interface {
+	mustEmbedUnimplementedMarketplaceServer()
+}
+
+func RegisterMarketplaceServer(s grpc.ServiceRegistrar, srv MarketplaceServer) {
+	s.RegisterService(&Marketplace_ServiceDesc, srv)
+}
+
+func _Marketplace_GetMarketplaceCategoryList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMarketplaceCategoryListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetMarketplaceCategoryList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetMarketplaceCategoryList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetMarketplaceCategoryList(ctx, req.(*GetMarketplaceCategoryListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_GetMarketplaceItemListByCategoryId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMarketplaceItemListByCategoryIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetMarketplaceItemListByCategoryId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetMarketplaceItemListByCategoryId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetMarketplaceItemListByCategoryId(ctx, req.(*GetMarketplaceItemListByCategoryIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_GetMarketplaceItemList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMarketplaceItemListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetMarketplaceItemList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetMarketplaceItemList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetMarketplaceItemList(ctx, req.(*GetMarketplaceItemListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_GetMarketplaceItemById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMarketplaceItemByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetMarketplaceItemById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetMarketplaceItemById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetMarketplaceItemById(ctx, req.(*GetMarketplaceItemByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_CreateMarketplaceItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateMarketplaceItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).CreateMarketplaceItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_CreateMarketplaceItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).CreateMarketplaceItem(ctx, req.(*CreateMarketplaceItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_UpdateMarketplaceItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMarketplaceItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).UpdateMarketplaceItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_UpdateMarketplaceItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).UpdateMarketplaceItem(ctx, req.(*UpdateMarketplaceItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_DeleteMarketplaceItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteMarketplaceItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).DeleteMarketplaceItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_DeleteMarketplaceItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).DeleteMarketplaceItem(ctx, req.(*DeleteMarketplaceItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_GetCartByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCartByUserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetCartByUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetCartByUserId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetCartByUserId(ctx, req.(*GetCartByUserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_DeleteCartByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCartByUserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).DeleteCartByUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_DeleteCartByUserId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).DeleteCartByUserId(ctx, req.(*DeleteCartByUserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_AddCartItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).AddCartItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_AddCartItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).AddCartItem(ctx, req.(*AddCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_RemoveCartItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).RemoveCartItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_RemoveCartItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).RemoveCartItem(ctx, req.(*RemoveCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_UpdateCartItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).UpdateCartItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_UpdateCartItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).UpdateCartItem(ctx, req.(*UpdateCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_CheckOutCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckOutCartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).CheckOutCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_CheckOutCart_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).CheckOutCart(ctx, req.(*CheckOutCartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_CheckOutCartItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckOutCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).CheckOutCartItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_CheckOutCartItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).CheckOutCartItem(ctx, req.(*CheckOutCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_GetCheckedOutItemList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCheckedOutItemListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetCheckedOutItemList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetCheckedOutItemList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetCheckedOutItemList(ctx, req.(*GetCheckedOutItemListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Marketplace_ConfirmCartItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).ConfirmCartItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_ConfirmCartItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).ConfirmCartItem(ctx, req.(*ConfirmCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Marketplace_ServiceDesc is the grpc.ServiceDesc for Marketplace service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Marketplace_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "Marketplace",
+	HandlerType: (*MarketplaceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetMarketplaceCategoryList",
+			Handler:    _Marketplace_GetMarketplaceCategoryList_Handler,
+		},
+		{
+			MethodName: "GetMarketplaceItemListByCategoryId",
+			Handler:    _Marketplace_GetMarketplaceItemListByCategoryId_Handler,
+		},
+		{
+			MethodName: "GetMarketplaceItemList",
+			Handler:    _Marketplace_GetMarketplaceItemList_Handler,
+		},
+		{
+			MethodName: "GetMarketplaceItemById",
+			Handler:    _Marketplace_GetMarketplaceItemById_Handler,
+		},
+		{
+			MethodName: "CreateMarketplaceItem",
+			Handler:    _Marketplace_CreateMarketplaceItem_Handler,
+		},
+		{
+			MethodName: "UpdateMarketplaceItem",
+			Handler:    _Marketplace_UpdateMarketplaceItem_Handler,
+		},
+		{
+			MethodName: "DeleteMarketplaceItem",
+			Handler:    _Marketplace_DeleteMarketplaceItem_Handler,
+		},
+		{
+			MethodName: "GetCartByUserId",
+			Handler:    _Marketplace_GetCartByUserId_Handler,
+		},
+		{
+			MethodName: "DeleteCartByUserId",
+			Handler:    _Marketplace_DeleteCartByUserId_Handler,
+		},
+		{
+			MethodName: "AddCartItem",
+			Handler:    _Marketplace_AddCartItem_Handler,
+		},
+		{
+			MethodName: "RemoveCartItem",
+			Handler:    _Marketplace_RemoveCartItem_Handler,
+		},
+		{
+			MethodName: "UpdateCartItem",
+			Handler:    _Marketplace_UpdateCartItem_Handler,
+		},
+		{
+			MethodName: "CheckOutCart",
+			Handler:    _Marketplace_CheckOutCart_Handler,
+		},
+		{
+			MethodName: "CheckOutCartItem",
+			Handler:    _Marketplace_CheckOutCartItem_Handler,
+		},
+		{
+			MethodName: "GetCheckedOutItemList",
+			Handler:    _Marketplace_GetCheckedOutItemList_Handler,
+		},
+		{
+			MethodName: "ConfirmCartItem",
+			Handler:    _Marketplace_ConfirmCartItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
