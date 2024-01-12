@@ -4,10 +4,11 @@ import (
 	"context"
 	"log"
 
-	db "github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/token_service"
-	models "github.com/Reigenleif/ecomate-mobile-backend-service/models"
-	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	db "ecomate-be/internal/db"
+	"ecomate-be/internal/token_service"
+	models "ecomate-be/models"
+	proto "ecomate-be/proto"
+
 	"github.com/gofrs/uuid"
 )
 
@@ -512,7 +513,6 @@ func (s *MarketplaceService) GetCheckedOutItemList(ctx context.Context, req *pro
 		CartItemList: cartItemList,
 	}, nil
 }
-
 
 func (s *MarketplaceService) ConfirmCartItem(ctx context.Context, req *proto.ConfirmCartItemRequest) (*proto.GeneralStatusResponse, error) {
 	UserClaims, err := token_service.CheckToken(ctx)

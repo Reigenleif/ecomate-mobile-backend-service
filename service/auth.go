@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 
-	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/token_service"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/models"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	"ecomate-be/internal/db"
+	"ecomate-be/internal/token_service"
+	"ecomate-be/models"
+	"ecomate-be/proto"
+
 	"github.com/gobuffalo/nulls"
 	"github.com/gofrs/uuid"
 	"golang.org/x/crypto/bcrypt"

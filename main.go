@@ -5,9 +5,11 @@ import (
 	"log"
 	"net"
 
-	proto"github.com/Reigenleif/ecomate-mobile-backend-service/proto"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/service"
+	"ecomate-be/internal/db"
+	proto "ecomate-be/proto"
+	"ecomate-be/service"
+	"ecomate-be/service/interceptors"
+
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"google.golang.org/grpc"
 )
@@ -17,9 +19,8 @@ var (
 	// certFile   = flag.String("cert_file", "", "The TLS cert file")
 	// keyFile    = flag.String("key_file", "", "The TLS key file")
 	// jsonDBFile = flag.String("json_db_file", "", "A json file containing a list of features")
-	port       = flag.Int("port", 50051, "The server port")
+	port = flag.Int("port", 50051, "The server port")
 )
-
 
 func main() {
 	// Initiate database connection
@@ -35,7 +36,9 @@ func main() {
 	}
 
 	serverOpts := []grpc.ServerOption{
-		
+		grpc.UnaryInterceptor(
+			interceptors.LoggerInterceptor,
+		),
 	}
 
 	serverRegistrar := grpc.NewServer(serverOpts...)
@@ -52,4 +55,3 @@ func main() {
 	}
 	log.Print("Server started on port 8080")
 }
-

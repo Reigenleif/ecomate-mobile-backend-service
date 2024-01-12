@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 
-	db "github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/token_service"
-	models "github.com/Reigenleif/ecomate-mobile-backend-service/models"
-	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	db "ecomate-be/internal/db"
+	"ecomate-be/internal/token_service"
+	models "ecomate-be/models"
+	proto "ecomate-be/proto"
+
 	"github.com/gofrs/uuid"
 )
 
@@ -64,11 +65,11 @@ func (s *NewsService) GetNewsCommentList(ctx context.Context, req *proto.GetNews
 	var newsCommentList []*proto.NewsComment
 	for _, item := range newsCommentDbList {
 		newsCommentList = append(newsCommentList, &proto.NewsComment{
-			Id:      item.ID.String,
+			Id:        item.ID.String,
 			CreatedAt: item.CreatedAt.String(),
-			Content: item.Content.String,
-			NewsId:  item.NewsID.String,
-			UserId:  item.UserID.String,
+			Content:   item.Content.String,
+			NewsId:    item.NewsID.String,
+			UserId:    item.UserID.String,
 		})
 	}
 

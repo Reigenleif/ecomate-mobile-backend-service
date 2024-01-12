@@ -1,11 +1,16 @@
-FROM golang:1.20
+FROM golang:1.19-alpine
 
 WORKDIR /app
 
 COPY go.mod go.sum ./
-COPY *.go ./
+COPY */*.go ./
 
-RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -o /bin
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on
+COPY go.* /app
+
+RUN go mod download 
+RUN go mod tidy
+RUN go get ecomate-be
+RUN go build -o /bin
 
 ENTRYPOINT [ /app/bin ]

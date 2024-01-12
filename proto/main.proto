@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/Reigenleif/ecomate-mobile-backend-service/proto";
+option go_package = "ecomate-be/proto";
 
 
 service Emoji {
