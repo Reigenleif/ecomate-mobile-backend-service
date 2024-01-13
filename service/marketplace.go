@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
-	db "ecomate-be/internal/db"
-	"ecomate-be/internal/token_service"
-	models "ecomate-be/models"
-	proto "ecomate-be/proto"
+	db "github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/token_service"
+	models "github.com/Reigenleif/ecomate-mobile-backend-service/models"
+	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
 
 	"github.com/gofrs/uuid"
 )

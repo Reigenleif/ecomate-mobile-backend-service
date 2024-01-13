@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
-	db "ecomate-be/internal/db"
-	models "ecomate-be/models"
-	proto "ecomate-be/proto"
+	db "github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
+	models "github.com/Reigenleif/ecomate-mobile-backend-service/models"
+	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
 )
 
 type FlashcardService struct {

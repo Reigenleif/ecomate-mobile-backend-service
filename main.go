@@ -5,10 +5,10 @@ import (
 	"log"
 	"net"
 
-	"ecomate-be/internal/db"
-	proto "ecomate-be/proto"
-	"ecomate-be/service"
-	"ecomate-be/service/interceptors"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
+	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/service"
+	"github.com/Reigenleif/ecomate-mobile-backend-service/service/interceptors"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"google.golang.org/grpc"

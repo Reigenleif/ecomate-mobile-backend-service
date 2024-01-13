@@ -1,4 +1,4 @@
-module ecomate-be
+module github.com/Reigenleif/ecomate-mobile-backend-service
 
 go 1.19
 
