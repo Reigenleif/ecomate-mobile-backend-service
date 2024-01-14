@@ -29,6 +29,9 @@ func main() {
 		panic(err)
 	}
 
+	log.Printf("grpc-ping: starting server...")
+      
+
 	// Initiate gRPC server
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -53,5 +56,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("impossible to serve: %s", err)
 	}
+
 	log.Print("Server started on port 8080")
 }
