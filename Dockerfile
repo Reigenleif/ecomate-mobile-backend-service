@@ -3,10 +3,10 @@ FROM golang:1.19
 WORKDIR /app
 
 COPY go.mod go.sum ./
-COPY */*.go ./
+COPY *.go ./
 
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on
-COPY go.* /app
+COPY go.* /app/
 
 RUN go mod download 
 # RUN go mod tidy
