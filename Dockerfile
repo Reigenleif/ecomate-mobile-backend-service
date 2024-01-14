@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine
+FROM golang:1.19
 
 WORKDIR /app
 
@@ -9,8 +9,8 @@ ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on
 COPY go.* /app
 
 RUN go mod download 
-RUN go mod tidy
-RUN go get github.com/Reigenleif/ecomate-mobile-backend-service
-RUN go build -o /bin
+# RUN go mod tidy
+# RUN go get github.com/Reigenleif/ecomate-mobile-backend-service
+# RUN go build -o /bin
 
-ENTRYPOINT [ /app/bin ]
+ENTRYPOINT "go run main.go"
