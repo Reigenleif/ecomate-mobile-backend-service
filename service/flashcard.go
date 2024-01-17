@@ -22,7 +22,7 @@ func (s *FlashcardService) GetFlashcardList(ctx context.Context, req *proto.GetF
 	var flashcardDbList []models.Flashcard
 	for rows.Next() {
 		var flashcardDb models.Flashcard
-		err := rows.Scan(&flashcardDb.ID, &flashcardDb.CreatedAt, nil, &flashcardDb.Title, &flashcardDb.ImageUrl, &flashcardDb.Description, &flashcardDb.IsPublished)
+		err := rows.Scan(&flashcardDb.ID, &flashcardDb.CreatedAt, nil, &flashcardDb.Title, &flashcardDb.Description , &flashcardDb.ImageUrl, &flashcardDb.IsPublished)
 		if err != nil {
 			return nil, err
 		}
