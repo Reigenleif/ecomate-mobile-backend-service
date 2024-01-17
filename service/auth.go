@@ -22,6 +22,7 @@ func (s *AuthService) Login(ctx context.Context, req *proto.LoginRequest) (*prot
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var user models.User
 	if rows.Next() {
@@ -115,6 +116,7 @@ func (s *AuthService) GoogleLogin(ctx context.Context, req *proto.LoginRequest) 
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var user models.User
 	if rows.Next() {

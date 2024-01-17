@@ -17,6 +17,7 @@ func (s *FlashcardService) GetFlashcardList(ctx context.Context, req *proto.GetF
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var flashcardDbList []models.Flashcard
 	for rows.Next() {

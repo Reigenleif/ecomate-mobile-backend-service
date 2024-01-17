@@ -21,6 +21,7 @@ func (s *MarketplaceService) GetMarketplaceCategoryList(ctx context.Context, req
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var categoryDbList []models.Category
 	for rows.Next() {
@@ -51,6 +52,7 @@ func (s *MarketplaceService) GetMarketplaceItemListByCategoryId(ctx context.Cont
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var itemDbList []models.Item
 	for rows.Next() {
@@ -84,6 +86,7 @@ func (s *MarketplaceService) GetMarketplaceItemList(ctx context.Context, req *pr
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var itemDbList []models.Item
 	for rows.Next() {
@@ -116,6 +119,7 @@ func (s *MarketplaceService) GetMarketplaceItemById(ctx context.Context, req *pr
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var itemDb models.Item
 	if rows.Next() {
@@ -197,6 +201,7 @@ func (s *MarketplaceService) GetCartByUserId(ctx context.Context, req *proto.Get
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -229,6 +234,7 @@ func (s *MarketplaceService) GetCartByUserId(ctx context.Context, req *proto.Get
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartItemDbList []models.CartItem
 	for rows.Next() {
@@ -281,6 +287,7 @@ func (s *MarketplaceService) AddCartItem(ctx context.Context, req *proto.AddCart
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -330,6 +337,7 @@ func (s *MarketplaceService) UpdateCartItem(ctx context.Context, req *proto.Upda
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -378,6 +386,7 @@ func (s *MarketplaceService) RemoveCartItem(ctx context.Context, req *proto.Remo
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -426,6 +435,7 @@ func (s *MarketplaceService) CheckOutCart(ctx context.Context, req *proto.CheckO
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -457,6 +467,7 @@ func (s *MarketplaceService) CheckOutCartItem(ctx context.Context, req *proto.Ch
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartDb models.Cart
 	if rows.Next() {
@@ -488,6 +499,7 @@ func (s *MarketplaceService) GetCheckedOutItemList(ctx context.Context, req *pro
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var cartItemDbList []models.CartItem
 	for rows.Next() {

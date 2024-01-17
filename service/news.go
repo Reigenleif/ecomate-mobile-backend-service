@@ -20,6 +20,7 @@ func (s *NewsService) GetNewsList(ctx context.Context, req *proto.GetNewsListReq
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var newsDbList []models.News
 	for rows.Next() {
