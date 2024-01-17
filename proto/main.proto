@@ -191,6 +191,7 @@ service Marketplace {
     rpc CheckOutCartItem (CheckOutCartItemRequest) returns (GeneralStatusResponse) {}
     rpc GetCheckedOutItemList (GetCheckedOutItemListRequest) returns (CartItemListResponse) {}
     rpc ConfirmCartItem (ConfirmCartItemRequest) returns (GeneralStatusResponse) {}
+    rpc getRecomendedItemList(GetRecomendedItemListRequest) returns (MarketplaceItemListResponse) {}
 }
 
 message GetMarketplaceCategoryListRequest {}
@@ -251,6 +252,8 @@ message UpdateCartItemRequest {
     string itemId = 1;
     int32 quantity = 2;
 }
+
+message GetRecomendedItemListRequest {}
 
 message MarketplaceItemListResponse {
     repeated MarketplaceItem marketplaceItemList = 1;

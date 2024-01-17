@@ -106,6 +106,7 @@ type Category struct {
 
 	Name        nulls.String `db:"name"`
 	Description nulls.String `db:"description"`
+	ImageUrl    nulls.String `db:"imageurl"`
 }
 
 type Item struct {

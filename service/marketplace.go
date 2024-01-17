@@ -26,7 +26,7 @@ func (s *MarketplaceService) GetMarketplaceCategoryList(ctx context.Context, req
 	var categoryDbList []models.Category
 	for rows.Next() {
 		var categoryDb models.Category
-		err := rows.Scan(&categoryDb.ID, &categoryDb.CreatedAt, nil, &categoryDb.Name, &categoryDb.Description)
+		err := rows.Scan(&categoryDb.ID, &categoryDb.CreatedAt, nil, &categoryDb.Name, &categoryDb.Description, &categoryDb.ImageUrl)
 		if err != nil {
 			return nil, err
 		}
@@ -39,6 +39,7 @@ func (s *MarketplaceService) GetMarketplaceCategoryList(ctx context.Context, req
 			Id:          category.ID.String,
 			Name:        category.Name.String,
 			Description: category.Description.String,
+			ImageUrl:    category.ImageUrl.String,
 		})
 	}
 
@@ -539,5 +540,38 @@ func (s *MarketplaceService) ConfirmCartItem(ctx context.Context, req *proto.Con
 
 	return &proto.GeneralStatusResponse{
 		Success: true,
+	}, nil
+}
+
+func (s *MarketplaceService) GetRecomendedItemList(ctx context.Context, req *proto.GetRecomendedItemListRequest) (*proto.MarketplaceItemListResponse, error) {
+	rows, err := db.GetDB().Query(ctx, "SELECT * FROM public.\"Item\" ORDER BY RANDOM() LIMIT 5")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var itemDbList []models.Item
+	for rows.Next() {
+		var itemDb models.Item
+		err := rows.Scan(&itemDb.ID, &itemDb.CreatedAt, nil, &itemDb.Name, &itemDb.Description, &itemDb.Price, &itemDb.ImageUrl, &itemDb.IsPublished, &itemDb.CategoryId, &itemDb.UserId)
+		if err != nil {
+			return nil, err
+		}
+		itemDbList = append(itemDbList, itemDb)
+	}
+
+	var itemList []*proto.MarketplaceItem
+	for _, item := range itemDbList {
+		itemList = append(itemList, &proto.MarketplaceItem{
+			Id:          item.ID.String,
+			Name:        item.Name.String,
+			Description: item.Description.String,
+			ImageUrl:    item.ImageUrl.String,
+			Price:       int32(item.Price.Int),
+		})
+	}
+
+	return &proto.MarketplaceItemListResponse{
+		MarketplaceItemList: itemList,
 	}, nil
 }

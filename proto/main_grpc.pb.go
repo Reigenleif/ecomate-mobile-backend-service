@@ -892,6 +892,7 @@ const (
 	Marketplace_CheckOutCartItem_FullMethodName                   = "/Marketplace/CheckOutCartItem"
 	Marketplace_GetCheckedOutItemList_FullMethodName              = "/Marketplace/GetCheckedOutItemList"
 	Marketplace_ConfirmCartItem_FullMethodName                    = "/Marketplace/ConfirmCartItem"
+	Marketplace_GetRecomendedItemList_FullMethodName              = "/Marketplace/getRecomendedItemList"
 )
 
 // MarketplaceClient is the client API for Marketplace service.
@@ -914,6 +915,7 @@ type MarketplaceClient interface {
 	CheckOutCartItem(ctx context.Context, in *CheckOutCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
 	GetCheckedOutItemList(ctx context.Context, in *GetCheckedOutItemListRequest, opts ...grpc.CallOption) (*CartItemListResponse, error)
 	ConfirmCartItem(ctx context.Context, in *ConfirmCartItemRequest, opts ...grpc.CallOption) (*GeneralStatusResponse, error)
+	GetRecomendedItemList(ctx context.Context, in *GetRecomendedItemListRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error)
 }
 
 type marketplaceClient struct {
@@ -1068,6 +1070,15 @@ func (c *marketplaceClient) ConfirmCartItem(ctx context.Context, in *ConfirmCart
 	return out, nil
 }
 
+func (c *marketplaceClient) GetRecomendedItemList(ctx context.Context, in *GetRecomendedItemListRequest, opts ...grpc.CallOption) (*MarketplaceItemListResponse, error) {
+	out := new(MarketplaceItemListResponse)
+	err := c.cc.Invoke(ctx, Marketplace_GetRecomendedItemList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MarketplaceServer is the server API for Marketplace service.
 // All implementations must embed UnimplementedMarketplaceServer
 // for forward compatibility
@@ -1088,6 +1099,7 @@ type MarketplaceServer interface {
 	CheckOutCartItem(context.Context, *CheckOutCartItemRequest) (*GeneralStatusResponse, error)
 	GetCheckedOutItemList(context.Context, *GetCheckedOutItemListRequest) (*CartItemListResponse, error)
 	ConfirmCartItem(context.Context, *ConfirmCartItemRequest) (*GeneralStatusResponse, error)
+	GetRecomendedItemList(context.Context, *GetRecomendedItemListRequest) (*MarketplaceItemListResponse, error)
 	mustEmbedUnimplementedMarketplaceServer()
 }
 
@@ -1142,6 +1154,9 @@ func (UnimplementedMarketplaceServer) GetCheckedOutItemList(context.Context, *Ge
 }
 func (UnimplementedMarketplaceServer) ConfirmCartItem(context.Context, *ConfirmCartItemRequest) (*GeneralStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmCartItem not implemented")
+}
+func (UnimplementedMarketplaceServer) GetRecomendedItemList(context.Context, *GetRecomendedItemListRequest) (*MarketplaceItemListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRecomendedItemList not implemented")
 }
 func (UnimplementedMarketplaceServer) mustEmbedUnimplementedMarketplaceServer() {}
 
@@ -1444,6 +1459,24 @@ func _Marketplace_ConfirmCartItem_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Marketplace_GetRecomendedItemList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRecomendedItemListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarketplaceServer).GetRecomendedItemList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Marketplace_GetRecomendedItemList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarketplaceServer).GetRecomendedItemList(ctx, req.(*GetRecomendedItemListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Marketplace_ServiceDesc is the grpc.ServiceDesc for Marketplace service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1514,6 +1547,10 @@ var Marketplace_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ConfirmCartItem",
 			Handler:    _Marketplace_ConfirmCartItem_Handler,
+		},
+		{
+			MethodName: "getRecomendedItemList",
+			Handler:    _Marketplace_GetRecomendedItemList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
