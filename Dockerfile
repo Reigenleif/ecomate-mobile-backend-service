@@ -11,5 +11,8 @@ RUN go mod download
 # RUN go mod tidy
 RUN go get github.com/Reigenleif/ecomate-mobile-backend-service
 # RUN go build 
+EXPOSE 8080
+ENV PORT 8080
+ENV HOSTNAME "0.0.0.0"
 
 CMD ["go", "run", "main.go"]

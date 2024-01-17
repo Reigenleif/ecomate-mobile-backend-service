@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net"
@@ -8,7 +9,6 @@ import (
 	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
 	proto "github.com/Reigenleif/ecomate-mobile-backend-service/proto"
 	"github.com/Reigenleif/ecomate-mobile-backend-service/service"
-	"github.com/Reigenleif/ecomate-mobile-backend-service/service/interceptors"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"google.golang.org/grpc"
@@ -30,7 +30,6 @@ func main() {
 	}
 
 	log.Printf("grpc-ping: starting server...")
-      
 
 	// Initiate gRPC server
 	lis, err := net.Listen("tcp", ":8080")
@@ -40,7 +39,10 @@ func main() {
 
 	serverOpts := []grpc.ServerOption{
 		grpc.UnaryInterceptor(
-			interceptors.LoggerInterceptor,
+			func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+				log.Printf("Request - Method:%s, Duration:%s", info.FullMethod)
+				return handler(ctx, req)
+			},
 		),
 	}
 
