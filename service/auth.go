@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 	"os"
 
 	"github.com/Reigenleif/ecomate-mobile-backend-service/internal/db"
@@ -122,6 +123,8 @@ func (s *AuthService) GoogleLogin(ctx context.Context, req *proto.LoginRequest) 
 	if err != nil {
 		panic(err)
 	}
+
+	log.Print("Google OAUTH Recieved:" + payload.Claims["email"].(string))
 
 	rows, err := db.GetDB().Query(ctx, "SELECT * FROM public.\"User\" WHERE email = $1", payload.Claims["email"])
 	if err != nil {
